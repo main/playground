@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 )
 
@@ -10,7 +9,7 @@ func main() {
 	//TODO parse args
 	fmt.Printf("%#v", os.Args)
 	if len(os.Args) != 3 {
-		log.Printf("Error: the number of command line parameters should be 2 (first one is source file path and second one is destination file path")
+		fmt.Println("Error: the number of command line parameters should be 2 (first one is source file path and second one is destination file path")
 		os.Exit(1)
 	}
 	sourceFilePath := os.Args[1]
@@ -18,9 +17,9 @@ func main() {
 	fmt.Printf("%#v%#v", sourceFilePath, destinationFilePath)
 	//TODO open source file
 	file, err := os.Open(sourceFilePath)
+	defer file.Close()
 	if err != nil {
-		fmt.Printf(err)
-		os.Exit(1)
+		fmt.Println(err)
 	}
 	//TODO open destination file
 	//TODO create variable for checksum
