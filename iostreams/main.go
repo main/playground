@@ -8,7 +8,7 @@ import (
 
 func main() {
 	//TODO parse args
-	log.Printf("%#v", os.Args)
+	fmt.Printf("%#v", os.Args)
 	if len(os.Args) != 3 {
 		log.Printf("Error: the number of command line parameters should be 2 (first one is source file path and second one is destination file path")
 		os.Exit(1)
@@ -17,7 +17,11 @@ func main() {
 	destinationFilePath := os.Args[2]
 	fmt.Printf("%#v%#v", sourceFilePath, destinationFilePath)
 	//TODO open source file
-
+	file, err := os.Open(sourceFilePath)
+	if err != nil {
+		fmt.Printf(err)
+		os.Exit(1)
+	}
 	//TODO open destination file
 	//TODO create variable for checksum
 	//TODO start copying file
