@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -29,8 +30,25 @@ func main() {
 		panic(err)
 	}
 	defer destinationFile.Close()
-	//TODO create variable for checksum
-	//TODO start copying file
+
+	//start copying file
+	bufer := [1 << 10]byte{}
+	for {
+		n, err := sourceFile.Read(bufer[:])
+		if n == 0 && err == io.EOF {
+			break
+		} else if err != nil {
+			fmt.Println(err)
+			panic(err)
+		}
+
+		n, err = destinationFile.Write(bufer[:])
+		if err != nil {
+			fmt.Println(err)
+			panic(err)
+		}
+	}
+
 	//TODO start increment checksum variable
 
 }
