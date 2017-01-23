@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"os"
@@ -31,10 +32,13 @@ func main() {
 	}
 	defer destinationFile.Close()
 
+	hasher := sha256.New()
+	sourceFileReader := io.TeeReader(sourceFile, hasher)
+
 	//start copying file
 	bufer := [1 << 10]byte{}
 	for {
-		n, err := sourceFile.Read(bufer[:])
+		n, err := sourceFileReader.Read(bufer[:])
 		if n == 0 && err == io.EOF {
 			break
 		} else if err != nil {
@@ -48,7 +52,6 @@ func main() {
 			panic(err)
 		}
 	}
-
-	//TODO start increment checksum variable
+	fmt.Printf("%x", hasher.Sum([]byte{}))
 
 }
