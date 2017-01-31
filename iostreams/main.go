@@ -34,23 +34,10 @@ func main() {
 
 	hasher := sha256.New()
 	sourceFileReader := io.TeeReader(sourceFile, hasher)
-
-	//start copying file
-	bufer := [1 << 10]byte{}
-	for {
-		n, err := sourceFileReader.Read(bufer[:])
-		if n == 0 && err == io.EOF {
-			break
-		} else if err != nil {
-			fmt.Println(err)
-			panic(err)
-		}
-
-		n, err = destinationFile.Write(bufer[:])
-		if err != nil {
-			fmt.Println(err)
-			panic(err)
-		}
+	_, err = io.Copy(destinationFile, sourceFileReader)
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
 	}
 	fmt.Printf("%x", hasher.Sum([]byte{}))
 
